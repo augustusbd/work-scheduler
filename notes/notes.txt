@@ -1,0 +1,44 @@
+
+
+	create virtual environment:
+py -m venv scheduler_env
+
+	enable venv:
+.\scheduler_env\Scripts\activate.ps1
+
+
+
+	install libraries
+pip install PySimpleGUI
+
+
+
+
+
+
+
+
+
+
+
+Libraries:
+	PySimpleGUI
+		
+
+
+
+
+
+	calendar:
+import calendar
+
+calendar.month(yy, mm)
+calendar.calendar(yy)
+
+
+
+
+
+
+
+
