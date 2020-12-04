@@ -32,7 +32,7 @@ class Scheduler():
 
         # STRANGE THINGS GOING ON HERE
         #shift_block = [f'{self._weekdays[day][:2]}: Employee {id} S{shift_pos}' for id in range(total_employees)]
-        shift_block = [f'S{shift_pos} Emp. {id}' for id in range(total_employees)]
+        shift_block = [f'{self._weekdays[day][:2]} S{shift_pos} Emp. {id}' for id in range(total_employees)]
         #shift_block = [f'Emp. {id}' for id in range(total_employees)]
         # change employee num based on previous' rows max number of employees
         #new_employee_number = shift_num
