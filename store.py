@@ -5,22 +5,15 @@ class Store():
     def __init__(self, name, store_ID):
         self._name = name
         self._ID = store_ID
-        self.setup()
 
-    def setup(self):
-        self._create_datasets()
-        #self._add_store_hours()
-        self._add_shift_times()
-        self._add_employees()
-        self._add_schedule_pattern()
-
-    def read_data_simple(self):
+    def setup_simple(self):
         """
         Simple Setup for data entry.
         """
-        with open('.\data\Example_data.txt', 'r') as simple:
-            data = simple.read()
-
+        self._create_datasets()
+        self._add_shift_times_simple()
+        self._add_employees_simple()
+        self._add_schedule_pattern()
 
     def _create_datasets(self):
         """
@@ -29,134 +22,41 @@ class Store():
             Employee Data
             Organizer Data
         """
-        self._create_shift_data()
-        self._create_employee_data()
-        self._create_organizer_data()
-
-    def _create_shift_data(self):
-        """
-        General Data Set.
-        :return: None
-        """
         with open(f'.\data\{self._name}_shifts.txt', 'w+') as general:
             general.write(f'{self._name} {self._ID} SHIFTS\n')
-        return None
 
-    def _create_employee_data(self):
         with open(f'.\data\{self._name}_employees.txt', 'w+') as employee:
             employee.write(f'{self._name} {self._ID} EMPLOYEES\n')
-            employee.write("EMPLOYEE FORMAT: [id] [fname] [lname] [position_type] [title] [availability] [priority]\n")
+            employee.write("EMPLOYEE FORMAT: [id] [fname] [lname]")
 
-    def _create_organizer_data(self):
-        with open(f'.\data\{self.name()}_organizer.txt', 'w+') as organizer:
-            organizer.write(f'{self._name} {self._ID)} ORGANIZER\n')
+        with open(f'.\data\{self._name}_organizer.txt', 'w+') as organizer:
+            organizer.write(f'{self._name} {self._ID} ORGANIZER\n')
             organizer.write('PATTERN:   SINE || SAWTOOTH || STEP-FUNCTION || ALTERNATE')
 
-    def _update_datasets(self):
-        """
-        Update datasets of Store.
-        """
-        pass
-
-    def _save_hours(self):
-        """
-        Saves inputted opening hours into general data file.
-        :return: None
-        """
-        hours = self._store_hours
-        topen, close = 0, 1
-        with open(f'.\data\{self._name}_data.txt', 'a+') as general:
-            general.write('OPENING HOURS:\n')
-
-            for day in week:
-                # EX:   Monday: 7AM to 11PM
-                general.write(f'{day}: {hours[day][topen]}AM to {hours[day][close]}PM\n')
-            general.write('\n')
-            general.write(divider())
-        return None
-
-    def _save_shifts(self):
-        """
-        Saves inputted shift times into general data file.
-        :return: None
-        """
-        shifts = self._shift_times
-        start, end = 0, 1
-        with open(f'.\data\{self._name}_shifts.txt', 'a+') as general:
-            general.write('SHIFT TIMES:\n')
-            for shift in shifts:
-                # EX:   Shift 1: 5AM to 2PM
-                general.write(f'Shift {shift}: {shifts[shift][start]}AM to {shifts[shift][end]}PM\n')
-        return None
-
-    def _save_employees(self):
-        """
-        Saves inputted employee information into general data file.
-        :return: None
-        """
-        employees = self._employees
-        first, last = 0, 1
-        with open(f'.\data\{self._name}_data.txt', 'a+') as general:
-            general.write('EMPLOYEES: [id]  [first name]  [last name]\n')
-            for id in range(len(employees)):
-                # EX: 0 Morty Smith
-                general.write(f'{id} {employees[id][first]} {employees[id][last]}\n')
-        return None
-
-    def _save_schedule(self):
-        """
-        Saves schedule created by Organizer.
-        :return: None
-        """
-        pass
-
-    def _add_store_hours(self):
-        self._store_hours = {}
-        exception = input("Are there different opening days? ")
-        if exception in affirmative:
-            # Ask about different groupings of hours
-            # Then input days that open the same,
-            #   same opening: [day1] thru [day5]
-            #   individual:   [day6] & [day7]
-            # input same times first, then individual times
-            pass
-
-        # All days have the same opening hours
-        else:
-            print("Monday thru Sunday:")
-            open = input("\t open: ")
-            close = input("\tclose: ")
-            for day in week:
-                self._store_hours[day] = [open, close]
-
-        self._save_hours()
-        return None
-
-    def _add_shift_times(self):
+    def _add_shift_times_simple(self):
         self._shift_times = {}
-        self._shift_amt = int(input('\nHow many shifts per day? '))
+        shift_amt = 3
+        # Shifts: 5AM to 2PM; 9AM to 6PM; 11AM to 8PM
+        shifts = [[5, 2], [9, 6], [11, 8]]
 
-        for shift in range(1, self._shift_amt+1):
-            print(f'Shift {shift}:')
-            start = input('\tstart time: ')
-            end =   input('\t  end time: ')
+        for shift in range(1, shift_amt+1):
+            start, end = shifts[shift-1]
             self._shift_times[shift] = [start, end]
+            print(f'Shift {shift}: {start}AM to {end}PM')
 
         self._save_shifts()
 
-    def _add_employees(self):
-        self._employees = []
-        employee_amt = input('\nHow many employees in department? ')
-        employee_amt = int(employee_amt)
+    def _add_employees_simple(self):
+        self._employees = {}
+        employee_amt = 3    # amount of employees
+        names = ['Morty Smith', 'Summer Smith', 'Rick Sanchez']
 
         for id in range(employee_amt):
-            print(f'Employee ID: {id}')
-            name = input('\t Enter first & last name: ')
-            first, last = name.split(' ')
-            self._employees.insert(id, [first, last])
+            print(f'Employee ID: {id} {names[id]}')
+            first, last = names[id].split(' ')
+            self._employees[id] = [first, last]
 
         self._save_employees()
-
 
     def _add_schedule_pattern(self):
         """
@@ -174,34 +74,39 @@ class Store():
         """
         pass
 
-    def _edit_employee(self):
+    def _save_shifts(self):
         """
-        Allows Store to edit employee's hours or availability.
+        Saves inputted shift times into general data file.
+        :return: None
+        """
+        shifts = self._shift_times
+        start, end = 0, 1
+        with open(f'.\data\{self._name}_shifts.txt', 'a+') as general:
+            for shift in shifts:
+                # EX:   Shift 1: 5AM to 2PM
+                general.write(f'Shift {shift}: {shifts[shift][start]}AM to {shifts[shift][end]}PM\n')
+        return None
+
+    def _save_employees(self):
+        """
+        Saves inputted employee information into general data file.
+        :return: None
+        """
+        employees = self._employees
+        first, last = 0, 1
+        with open(f'.\data\{self._name}_employees.txt', 'a+') as general:
+            general.write('EMPLOYEES: [id]  [first name]  [last name]\n')
+            for id in range(len(employees)):
+                # EX: 0 Morty Smith
+                general.write(f'{id} {employees[id][first]} {employees[id][last]}\n')
+        return None
+
+    def _save_schedule(self):
+        """
+        Saves schedule created by Organizer.
         :return: None
         """
         pass
-
-    def _edit_store_hours(self):
-        pass
-
-    def _edit_shift_times(self):
-        pass
-
-    def _edit_schedule_pattern(self):
-        pass
-
-    def name(self):
-        return self._name
-
-    def ID(self):
-        return self._ID
-
-    def employees_list(self):
-        return self._employees
-
-    def list_employees(self):
-        for employee in self._employees:
-            print(x)
 
 
 
