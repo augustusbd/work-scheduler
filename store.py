@@ -4,49 +4,52 @@ affirmative = ['yes', 'y', 'ya']
 class Store():
     def __init__(self, name, store_ID):
         self._name = name
-        self._store_ID = store_ID
-        #self.setup()
+        self._ID = store_ID
+        self.setup()
 
     def setup(self):
         self._create_datasets()
-        self._add_store_hours()
+        #self._add_store_hours()
         self._add_shift_times()
         self._add_employees()
         self._add_schedule_pattern()
 
+    def read_data_simple(self):
+        """
+        Simple Setup for data entry.
+        """
+        with open('.\data\Example_data.txt', 'r') as simple:
+            data = simple.read()
+
+
     def _create_datasets(self):
         """
         Create datasets for store:
-            General Data
+            Shift Times Data
             Employee Data
             Organizer Data
         """
-        self._create_general_data()
+        self._create_shift_data()
         self._create_employee_data()
         self._create_organizer_data()
 
-    def _create_general_data(self):
+    def _create_shift_data(self):
         """
         General Data Set.
         :return: None
         """
-        with open(f'.\data\{self._name}_data.txt', 'w+') as general:
-            general.write(f'{self._name} {self.ID()}\n')
-            general.write(divider())
+        with open(f'.\data\{self._name}_shifts.txt', 'w+') as general:
+            general.write(f'{self._name} {self._ID} SHIFTS\n')
         return None
 
     def _create_employee_data(self):
-        with open(f'.\data\{self.name()}_employees.txt', 'w+') as employee:
-            employee.write(f'{self._name} {self.ID()} EMPLOYEES\n')
-            employee.write(divider())
-
+        with open(f'.\data\{self._name}_employees.txt', 'w+') as employee:
+            employee.write(f'{self._name} {self._ID} EMPLOYEES\n')
             employee.write("EMPLOYEE FORMAT: [id] [fname] [lname] [position_type] [title] [availability] [priority]\n")
 
     def _create_organizer_data(self):
         with open(f'.\data\{self.name()}_organizer.txt', 'w+') as organizer:
-            organizer.write(f'{self._name} {self.ID()} ORGANIZER\n')
-            organizer.write(divider())
-
+            organizer.write(f'{self._name} {self._ID)} ORGANIZER\n')
             organizer.write('PATTERN:   SINE || SAWTOOTH || STEP-FUNCTION || ALTERNATE')
 
     def _update_datasets(self):
@@ -54,19 +57,6 @@ class Store():
         Update datasets of Store.
         """
         pass
-
-    def _save(self, item):
-        """
-        Saves the inputted information into a file.
-        """
-        if item in 'hours':
-            pass
-        elif item in 'shifts':
-            pass
-        elif item in 'employee':
-            pass
-        elif item in 'pattern':
-            pass
 
     def _save_hours(self):
         """
@@ -92,14 +82,11 @@ class Store():
         """
         shifts = self._shift_times
         start, end = 0, 1
-        with open(f'.\data\{self._name}_data.txt', 'a+') as general:
+        with open(f'.\data\{self._name}_shifts.txt', 'a+') as general:
             general.write('SHIFT TIMES:\n')
-
             for shift in shifts:
                 # EX:   Shift 1: 5AM to 2PM
                 general.write(f'Shift {shift}: {shifts[shift][start]}AM to {shifts[shift][end]}PM\n')
-            general.write('\n')
-            general.write(divider())
         return None
 
     def _save_employees(self):
@@ -111,12 +98,17 @@ class Store():
         first, last = 0, 1
         with open(f'.\data\{self._name}_data.txt', 'a+') as general:
             general.write('EMPLOYEES: [id]  [first name]  [last name]\n')
-
             for id in range(len(employees)):
                 # EX: 0 Morty Smith
                 general.write(f'{id} {employees[id][first]} {employees[id][last]}\n')
         return None
 
+    def _save_schedule(self):
+        """
+        Saves schedule created by Organizer.
+        :return: None
+        """
+        pass
 
     def _add_store_hours(self):
         self._store_hours = {}
@@ -157,12 +149,9 @@ class Store():
         employee_amt = input('\nHow many employees in department? ')
         employee_amt = int(employee_amt)
 
-
         for id in range(employee_amt):
             print(f'Employee ID: {id}')
             name = input('\t Enter first & last name: ')
-            #first =  input('\tEnter first name: ')
-            #last = input('\tEnter last name: ')
             first, last = name.split(' ')
             self._employees.insert(id, [first, last])
 
@@ -205,7 +194,7 @@ class Store():
         return self._name
 
     def ID(self):
-        return self._store_ID
+        return self._ID
 
     def employees_list(self):
         return self._employees
