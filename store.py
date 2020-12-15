@@ -22,13 +22,16 @@ class Store():
             Employee Data
             Organizer Data
         """
-        with open(f'.\data\{self._name}_shifts.txt', 'w+') as general:
-            general.write(f'{self._name} {self._ID} SHIFTS\n')
+        # Store's Shift Times
+        with open(f'.\data\{self._name}_shifts.txt', 'w+') as shift_times:
+            shift_times.write(f'{self._name} {self._ID} SHIFTS\n')
 
-        with open(f'.\data\{self._name}_employees.txt', 'w+') as employee:
-            employee.write(f'{self._name} {self._ID} EMPLOYEES\n')
-            employee.write("EMPLOYEE FORMAT: [id] [fname] [lname]")
+        # Store's Employees Data
+        with open(f'.\data\{self._name}_employees.txt', 'w+') as employees_data:
+            employees_data.write(f'{self._name} {self._ID} EMPLOYEES\n')
+            employees_data.write('EMPLOYEE FORMAT: [id] [fname] [lname]')
 
+        # Store's Organizer Data
         with open(f'.\data\{self._name}_organizer.txt', 'w+') as organizer:
             organizer.write(f'{self._name} {self._ID} ORGANIZER\n')
             organizer.write('PATTERN:   SINE || SAWTOOTH || STEP-FUNCTION || ALTERNATE')
@@ -48,10 +51,9 @@ class Store():
 
     def _add_employees_simple(self):
         self._employees = {}
-        employee_amt = 3    # amount of employees
         names = ['Morty Smith', 'Summer Smith', 'Rick Sanchez']
 
-        for id in range(employee_amt):
+        for id in range(len(names)):
             print(f'Employee ID: {id} {names[id]}')
             first, last = names[id].split(' ')
             self._employees[id] = [first, last]
@@ -81,10 +83,10 @@ class Store():
         """
         shifts = self._shift_times
         start, end = 0, 1
-        with open(f'.\data\{self._name}_shifts.txt', 'a+') as general:
+        with open(f'.\data\{self._name}_shifts.txt', 'a+') as shift_times:
             for shift in shifts:
                 # EX:   Shift 1: 5AM to 2PM
-                general.write(f'Shift {shift}: {shifts[shift][start]}AM to {shifts[shift][end]}PM\n')
+                shift_times.write(f'Shift {shift}: {shifts[shift][start]}AM to {shifts[shift][end]}PM\n')
         return None
 
     def _save_employees(self):
@@ -94,11 +96,11 @@ class Store():
         """
         employees = self._employees
         first, last = 0, 1
-        with open(f'.\data\{self._name}_employees.txt', 'a+') as general:
-            general.write('EMPLOYEES: [id]  [first name]  [last name]\n')
+        with open(f'.\data\{self._name}_employees.txt', 'a+') as employees_data:
+            employees_data.write('EMPLOYEES: [id]  [first name]  [last name]\n')
             for id in range(len(employees)):
                 # EX: 0 Morty Smith
-                general.write(f'{id} {employees[id][first]} {employees[id][last]}\n')
+                employees_data.write(f'{id} {employees[id][first]} {employees[id][last]}\n')
         return None
 
     def _save_schedule(self):
@@ -178,6 +180,7 @@ class Employee():
         for day in self._availability:
             print(f"{day}: {self._availability[day]}")
 
+    # RETURN VALUES FOR EMPLOYEE
     def priority(self):
         return self._priority
     def availability(self):
@@ -198,8 +201,3 @@ class Employee():
         return f"{self._position_type} with {self._hours_per_week} hours per week"
     def title(self):
         return self._title
-
-
-
-def divider():
-    return "==================================\n"
