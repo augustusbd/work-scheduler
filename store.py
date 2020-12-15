@@ -1,7 +1,9 @@
-week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-affirmative = ['yes', 'y', 'ya']
+# Scheduler - Store & Employee
 
 class Store():
+    week_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    affirmative = ['yes', 'y', 'ya']
+
     def __init__(self, name, store_ID):
         self._name = name
         self._ID = store_ID
@@ -13,7 +15,7 @@ class Store():
         self._create_datasets()
         self._add_shift_times_simple()
         self._add_employees_simple()
-        self._add_schedule_pattern()
+        self._add_organizer()
 
     def _create_datasets(self):
         """
@@ -42,9 +44,8 @@ class Store():
         # Shifts: 5AM to 2PM; 9AM to 6PM; 11AM to 8PM
         shifts = [[5, 2], [9, 6], [11, 8]]
 
-        for shift in range(1, shift_amt+1):
-            start, end = shifts[shift-1]
-            self._shift_times[shift] = [start, end]
+        for shift in range(len(shifts)):
+            self._shift_times[shift+1] = shifts[shift]
             print(f'Shift {shift}: {start}AM to {end}PM')
 
         self._save_shifts()
@@ -60,7 +61,7 @@ class Store():
 
         self._save_employees()
 
-    def _add_schedule_pattern(self):
+    def _add_organizer(self):
         """
         Get schedule pattern for store.
         Ex: Have scheduling snake across times per day.
@@ -74,7 +75,13 @@ class Store():
         (Sawtooth Wave for above; Sine Waves & Step Functions also work)
         :return:
         """
-        pass
+        print('Choose pattern: SINE or SAWTOOTH or STEP-FUNCTION or ALTERNATE')
+        self.pattern = 'sawtooth'
+        # choice = input('Choose pattern: SINE or SAWTOOTH or STEP-FUNCTION or ALTERNATE: ')
+        # self.pattern = choice
+
+        import organizer as ORG
+        self.organizer = ORG.Organizer(self)
 
     def _save_shifts(self):
         """
@@ -158,7 +165,7 @@ class Employee():
         :return: None
         """
         self._availability = {}
-        for day in week:
+        for day in self.week_days:
             self._availability[day] = input(f"Enter availability for {day}'s': ")
         self.list_availability()
 
