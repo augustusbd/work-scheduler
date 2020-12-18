@@ -1,17 +1,20 @@
 # Scheduler - Store & Employee
 
 class Store():
-    week_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    open_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     affirmative = ['yes', 'y', 'ya']
 
     def __init__(self, name, store_ID):
         self._name = name
         self._ID = store_ID
 
+
     def setup_simple(self):
         """
         Simple Setup for data entry.
         """
+        self.total_employees = 5
+
         self._create_datasets()
         self._add_shift_times_simple()
         self._add_employees_simple()
@@ -51,14 +54,7 @@ class Store():
         self._save_shifts()
 
     def _add_employees_simple(self):
-        self._employees = {}
-        names = ['Morty Smith', 'Summer Smith', 'Rick Sanchez']
-
-        for id in range(len(names)):
-            print(f'Employee ID: {id} {names[id]}')
-            first, last = names[id].split(' ')
-            self._employees[id] = [first, last]
-
+        self._employees = [f'Employee 00{x+1}' for x in range(self.total_employees)]
         self._save_employees()
 
     def _add_organizer(self):
@@ -165,7 +161,7 @@ class Employee():
         :return: None
         """
         self._availability = {}
-        for day in self.week_days:
+        for day in self.open_days:
             self._availability[day] = input(f"Enter availability for {day}'s': ")
         self.list_availability()
 
@@ -177,7 +173,8 @@ class Employee():
             Med
             Low - default
         """
-        self._priority = 'Low'
+        priority = input(f'High, Med, or Low priorty. Enter priority of {self._name}: ')
+        self._priority = priority.lower()
 
 
     def _request_off(self):

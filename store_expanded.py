@@ -145,18 +145,20 @@ class Store():
         self._save_shifts()
 
     def _add_employees(self):
-        self._employees = []
+        self._employees = {}
         employee_amt = input('\nHow many employees in department? ')
         employee_amt = int(employee_amt)
 
         for id in range(employee_amt):
-            print(f'Employee ID: {id}')
-            name = input('\t Enter first & last name: ')
+            name = input(f'\t Enter first & last name for Employee 00{id}: ')
             first, last = name.split(' ')
-            self._employees.insert(id, [first, last])
+            self._employees[id] = [first, last]
 
         self._save_employees()
 
+    def _remove_employee(self, id):
+        self._employees.pop(id)
+        return None
 
     def _add_schedule_pattern(self):
         """
