@@ -1,4 +1,4 @@
-# Scheduler - Organizer 
+# Scheduler - Organizer
 
 class Organizer():
     """
@@ -8,26 +8,45 @@ class Organizer():
     and Store's pattern for scheduling to create a weekly schedule.
     """
     def __init__(self, store):
+        # store data
         self.store = store
-        self.pattern = self.store.pattern
-        self.week = self.store.week_days
+        self.pattern = store.pattern
+        self.week = store.open_days
+        self.shifts = store._shift_times
 
-        self._create_shifts()
+        # employee data
+        self.total_employees = store.total_employees
+        self.employees = store._employees
 
-    def _create_shifts(self):
+        self._create_empty_week()
+        self._create_priority_list()
+
+    def _create_empty_week(self):
         """
         Creates Empty Arrary for managing schedules.
         :return: None
         """
         store = self.store
-        self.shifts = store._shift_times
-        self.employees = store._employees
         employees_per_shift = 1
 
         shift_schedule = [[[None for employees in range(employees_per_shift)]
                             for shift in self.shifts] for day in self.week]
 
         print_shifts(shift_schedule)
+
+
+    def schedule(self):
+        if 'saw' in self.pattern.lower():
+            self._schedule_saw()
+
+        else:
+            print("Other patterns not implemented yet.")
+
+
+    def _schedule_saw(self):
+        # use sawtooth pattern for scheduling employees
+        pass
+
 
 
 
