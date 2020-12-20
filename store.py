@@ -116,43 +116,39 @@ class Store():
 
 
 class Employee():
-    def __init__(self, first_name, last_name, employee_id,
-                 store, title='Worker', position='TEMPORARY'):
-        self._name = [first_name, last_name]
-        self._ID = employee_id
+    def __init__(self, employee_id, full_name):
+        self.ID = employee_id
+        self.name = full_name
+        self.hours_per_week = 40
+        #first_name, last_name = full_name[0], full_name[-1]
 
-        self._store = store
-        self._title = title
-        self._position_type = position
-        self._setup_employee()
+        #self._store = store
+        #self._title = 'Worker'
+        #self._position_type = 'Temporary'
 
-    def _setup_employee(self):
+        self.setup_employee()
+
+    def setup_employee(self):
         """
         Setup Employee Preferences
         :return: None
         """
-        self._edit_position()
-        self._edit_availability()
-        self._edit_priority()
+        self.edit_total_hours()
+        self.edit_availability()
+        #self.edit_priority()
+        # priority will be based on employee id
+        # lowest ID number is #1 priority
 
-    def _edit_position(self):
+    def edit_total_hours(self):
         """
         Automatically temporary until changed (TBD).
         Choose part-time, full-time, temporary, or contract.
         :return: None
         """
-        self._position_type = input("Part-time, Full-Time, Temporary, or Contract: ")
+        self.hours_per_week = input(f"Enter total hours per week for {self.name}: ")
 
-        if self._position_type in 'FULL-TIME':
-            self._hours_per_week = 40
-        elif self._position_type in 'PART-TIME':
-            self._hours_per_week = 30
-        elif self._position_type in 'TEMPORARY':
-            self._hours_per_week = 35
-        else: # Contract position
-            self._hours_per_week = 40
 
-    def _edit_availability(self):
+    def edit_availability(self):
         """
         Set availability for employee.
         A dictionary containing each day as key and times as value.
@@ -160,48 +156,28 @@ class Employee():
         Later, this can be inputted through a table.
         :return: None
         """
-        self._availability = {}
+        blurb = """
+                Enter available times during open days. Enter in 12 hour format.
+                Earliest time then latest time.
+                If you are unavailable on a specific day, put 'NA'.
+                """
+        print(blurb)
+
+        self.availability = {}
         for day in self.open_days:
-            self._availability[day] = input(f"Enter availability for {day}'s': ")
+            earliest = input(f"Enter earliest availability for {day}: ")
+            latest = input(f"Enter latest availability for {day}: ")
+            self.availability[day] = (earliest, latest)
+
         self.list_availability()
 
-    def _edit_priority(self):
-        """
-        Set the employee's priority in scheduling.
-        Ranking:
-            High
-            Med
-            Low - default
-        """
-        priority = input(f'High, Med, or Low priorty. Enter priority of {self._name}: ')
-        self._priority = priority.lower()
 
 
-    def _request_off(self):
+    def request_off(self):
         pass
 
     def list_availability(self):
         for day in self._availability:
-            print(f"{day}: {self._availability[day]}")
+            print(f"{day}: {self._availability[day][0]}AM to {self._availability[day][1]}PM")
 
     # RETURN VALUES FOR EMPLOYEE
-    def priority(self):
-        return self._priority
-    def availability(self):
-        return self._availability
-    def name(self):
-        return f"{self._name[0]} {self._name[1]}"
-    def first(self):
-        return self._name[0]
-    def last(self):
-        return self._name[1]
-    def id(self):
-        return self._ID
-    def position(self):
-        """
-        **Find a way to put Title, Position Type, and Hours together**
-        :return:
-        """
-        return f"{self._position_type} with {self._hours_per_week} hours per week"
-    def title(self):
-        return self._title

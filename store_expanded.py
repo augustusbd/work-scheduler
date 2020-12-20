@@ -275,6 +275,7 @@ class Employee():
         for day in self._availability:
             print(f"{day}: {self._availability[day]}")
 
+    # RETURN VALUES FOR EMPLOYEE
     def priority(self):
         return self._priority
     def availability(self):
